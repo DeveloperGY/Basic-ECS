@@ -1,17 +1,28 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
-#include "entity.h"
+#include "component_array.h"
 
-#include <array>
+#include <vector>
+#include <memory>
 
-template<class T>
-class ComponentArray
+typedef int Component;
+
+class Components
 {
     private:
-        std::array<T, MAX_ENTITIES> arr;
+        static std::vector<std::unique_ptr<_ComponentArray>> component_arrays;
+        static int next_id;
 
     public:
+        template <class T>
+        static Component register_component();
 };
+
+template <class T>
+Component Components::register_component()
+{
+    return this->next_id++;
+}
 
 #endif
