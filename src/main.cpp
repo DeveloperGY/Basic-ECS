@@ -12,9 +12,17 @@ struct Position
     float z;
 };
 
+struct Velocity
+{
+    float dx;
+    float dy;
+    float dz;
+};
+
 int main(void)
 {
-    Component position = Components::register_component<Position>();
+    Components::register_component<Position>();
+    Components::register_component<Velocity>();
 
     Entity player = Entities::gen_entity();
     Entities::recycle(player);

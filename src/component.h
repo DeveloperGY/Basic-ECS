@@ -3,26 +3,38 @@
 
 #include "component_array.h"
 
-#include <vector>
 #include <memory>
+#include <unordered_map>
+#include <string>
+#include <typeinfo>
 
 typedef int Component;
 
 class Components
 {
     private:
-        static std::vector<std::unique_ptr<_ComponentArray>> component_arrays;
-        static int next_id;
+        static std::unordered_map<std::string, std::shared_ptr<_ComponentArray>> component_arrays;
 
     public:
         template <class T>
-        static Component register_component();
+        static void register_component();
 };
 
 template <class T>
-Component Components::register_component()
+void Components::register_component()
 {
-    return this->next_id++;
+    std::string name = typeid(T).name();
+
+    if (Components::component_arrays.find(name) == Components::component_arrays.end())
+    {
+        std::shared_ptr<_ComponentArray> ptr = std::static_pointer_cast<_ComponentArray>(std::make_shared<ComponentArray<T>>());
+        Components::component_arrays.insert({name, ptr});
+    }
+
+    return;
 }
+
+
+
 
 #endif
